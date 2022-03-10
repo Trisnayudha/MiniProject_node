@@ -4,6 +4,8 @@ const {
     loadContact,
     findContact,
     addContact,
+    deleteContact,
+    updateContact
 } = require('./Controller/contact')
 const {
     body,
@@ -122,11 +124,49 @@ app.get('/contact/:nama', (req, res) => {
     })
 })
 
-// app.get('/product/:id/categori/:idCat', (req, res) => {
-app.get('/product/:id', (req, res) => {
-    // res.send(`Product ID : ${req.params.id} <br> Categori ID : ${req.params.idCat} `)
-    res.send(`Product ID : ${req.params.id} <br> Categori Query : ${req.query.category} `)
+app.get('/contact/delete/:nama', (req, res) => {
+    const contact = findContact(req.params.nama)
+
+    if (!contact) {
+        res.status(404)
+        res.send('Data tidak ada')
+    } else {
+        deleteContact(req.params.nama)
+
+        req.flash('msg', 'Data Kontak Berhasil Dihapus')
+        res.redirect('/contact')
+    }
 })
+
+app.post('/contact/update', [
+    check('nohp', 'Nomor HP harus di isi').isMobilePhone('id-ID'),
+], (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.render('edit-contact', {
+            title: 'Form Ubah data',
+            layout: 'layouts/main-layout',
+            errors: errors.array(),
+            contact: req.body
+        })
+    } else {
+        updateContact(req.body)
+        // //flash message
+        req.flash('msg', 'Data Kontak Berhasil diUbah')
+        res.redirect('/contact')
+    }
+})
+
+app.get('/contact/edit/:nama', (req, res) => {
+    const contact = findContact(req.params.nama)
+    res.render('edit-contact', {
+        layout: 'layouts/main-layout',
+        title: 'Form edit data',
+        contact
+    })
+})
+
+
 
 app.use('/', (req, res) => {
     res.status(404)
