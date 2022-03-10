@@ -1,0 +1,17 @@
+<h1>HALAMAN INDEX HTML</h1>
+<% data.forEach(payload => { %>
+<ul>
+    <li>Nama saya : <%= payload.nama %></li>
+    <li>Kelas: <%= payload.kelas %></li>
+</ul>
+
+<% }) %>
+
+
+<% if (mahasiswa.length < 1) { %>
+<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Similique debitis, et perferendis voluptatum ipsam
+    harum repellendus enim accusantium provident sint esse soluta, fugit obcaecati. Impedit similique earum ab quas
+    pariatur?</p>
+<% }else{%>
+<p>YUDHA TAMVAN</p>
+<% } %>
